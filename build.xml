@@ -1,0 +1,177 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+
+<!-- to upload to the sourceforge project web site, "sftp myUserName,open-dis@web.sourceforge.net",
+     ie your sourceforge login name, a comma, and the group name. To transfer files you can do 
+     something like scp -r aLocalDirectory myUserName,open-dis@web.sourceforge.net:/home/groups/o/op/open-dis/htdocs
+     though the location of the directory on the sourceforge side may change over time.
+-->
+
+<project name="open-dis enumerations" default="dist" basedir=".">
+    <property name="src" location="src/main"/>
+    <property name="build" location="build"/>
+    <property name="lib" location="lib"/>
+    <property name="dist" location="dist"/>
+    <property name="docs" location="docs"/>
+    <property name="version" value="1.1"/>
+    <property name="test" location="src/test"/>
+    
+    <property name="jarfile" location="${dist}/dis-enums_${version}.jar"/>
+    <property name="compile.debug" value="true"/>
+
+    <fileset id="lib.jars" dir="${lib}">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <path id="lib.path">
+        <fileset refid="lib.jars"/>
+    </path>
+    
+    <target name="init" description="create initial directories">
+    	<mkdir dir="dist"/>
+      <mkdir dir="dist/docs"/>
+      <mkdir dir="build"/>
+      <mkdir dir="build/test"/>
+      <mkdir dir="${src}/java/edu/nps/moves/siso/jaxb"/>
+      <mkdir dir="${src}/java/edu/nps/moves/disenum"/>
+      <mkdir dir="${src}/cpp/disenum"/>
+      <mkdir dir="${src}/Csharp/disenum"/> <!--08/26/2009 PES added for C# support-->
+    </target>
+
+    <!-- compile the java code-generation code -->
+    <target name="compileEbv" depends="generateEbvClasses" description="Compile java code generation code">
+        <javac srcdir="${src}" destdir="${build}"
+               source="1.5" target="1.5"
+               includeAntRuntime="no"
+               classpathref="lib.path" debug="${compile.debug}">
+        </javac>
+        
+        <copy todir="${build}">
+          <fileset dir="src" includes="**/*.properties"/>
+        </copy> 
+    </target>
+
+    <!-- compile the java code that was generated -->
+    <target name="compile" depends="run" description="Compile java code">
+        <javac srcdir="${src}" destdir="${build}"
+               source="1.5" target="1.5"
+               includeAntRuntime="no"
+               classpathref="lib.path" debug="${compile.debug}">
+        </javac>
+        
+        <copy todir="${build}">
+          <fileset dir="src" includes="**/*.properties"/>
+        </copy> 
+    </target>
+    
+    <target name="compileTest" depends="compile" description="Compile java test code and place it in the test directory of of build">
+            
+         <javac srcdir="${test}" destdir="${build}/test"
+               source="1.5" target="1.5"
+               includeAntRuntime="no">
+               <classpath>
+                 <fileset dir="${lib}">
+                   <include name="**/*.jar"/>
+                 </fileset>
+                 <pathelement location="${build}"/>
+               </classpath>
+         </javac>
+    </target>
+    
+    <!-- Runs the generation program, which creates the java enumeration classes from the EBV xml file -->
+     <target name="run" depends="compileEbv" description="run java enumeration class creation program">
+      <java classname="edu.nps.moves.siso.EBVReader">
+        <classpath>
+          <fileset dir="lib">
+            <include name="**/*.jar"/>
+          </fileset>
+          <pathelement location="build"/>
+        </classpath>
+    </java>
+    </target>
+
+	<!--PES 08/26/2009 Added for C# support -->
+	    <!-- Runs the generation program, which creates the C# enumeration classes from the EBV xml file -->
+	     <target name="runCSharp" depends="compileEbv" description="run java enumeration class creation program">
+	      <java classname="edu.nps.moves.siso.EBVReaderCsharp">
+	        <classpath>
+	          <fileset dir="lib">
+	            <include name="**/*.jar"/>
+	          </fileset>
+	          <pathelement location="build"/>
+	        </classpath>
+	    </java>
+	    </target>
+	
+    <!-- XJC ant task -->
+    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+      <classpath>
+        <fileset dir="lib" includes="**/*.jar" />
+      </classpath>
+    </taskdef>
+    
+    <!-- schemagen ant task -->
+    <taskdef name="schemagen" classname="com.sun.tools.jxc.SchemaGenTask">
+      <classpath>
+        <fileset dir="lib" includes="**/*.jar" />
+      </classpath>
+    </taskdef>
+    
+    <!-- generate java classes from the EBV xsd schema. This helps with parsing the EBV document -->
+    <target name="generateEbvClasses" depends="init" description="Generate a schema from the Java code">
+        <xjc schema="data/siso-std-010.xsd" package="edu.nps.moves.siso.jaxb" destdir="src"/>
+    </target>
+    
+    <target name="jar" depends="compile" description="Build jar">
+        <mkdir dir="${dist}"/>
+        <delete dir="${build}/test"/>
+        <jar jarfile="${jarfile}" basedir="build"/>
+        <copy file="${jarfile}" tofile="dis-enums_${version}.jar"/>
+    </target>
+    
+    <target name="javadoc" depends="compile" description="generate javadocs for the enumeration code">
+      <javadoc destdir="dist/docs" packagenames="edu.nps.moves.disenum" sourcepath="src">
+          <classpath>
+              <fileset dir="lib">
+                  <include name="**/*.jar"/>
+              </fileset>
+          </classpath>
+        </javadoc>
+     </target>
+    
+    <target name="dist" depends="init, generateEbvClasses, run, runCSharp, compile, test, javadoc, jar" description="do everything">
+    <copy file="README.html" tofile="${dist}/README.html"/>
+    <copy file="license.txt" tofile="${dist}/license.txt"/>
+    </target>
+    
+    <!-- There are potentially many gotchas with JUNit 4.4, 4.5, and ant 1.5, 1.6, and 1.7 due to classloader issues. Be careful -->
+    <target name="test" depends="compileTest">
+      <junit>
+      <formatter type="plain" usefile="false"/>
+      <classpath>
+        <pathelement location="${build}"/>
+        <pathelement location="${build}/test"/>
+        <pathelement location="lib/junit-4.4.jar"/>
+      </classpath>
+      
+      <test name="edu.nps.moves.disenum.EnumerationsTestSuite"/>
+      
+      </junit>
+    </target>
+    
+
+    <target name="clean" description="Remove build and dist directories">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+        <delete>
+          <fileset dir="${src}/java/edu/nps/moves/disenum" includes="*.java"/>
+          <fileset dir="${src}/java/edu/nps/moves/siso/jaxb" includes="*.java"/>
+        </delete>
+        <delete>
+          <fileset dir="${src}/cpp/disenum" includes="*.h"/>
+          <fileset dir="${src}/cpp/disenum" includes="*.cpp"/>
+        </delete>
+    	<delete>
+    		<fileset dir="${src}/Csharp/disenum" includes="*.cs"/>  <!--08/26/2009 PES added for C# support-->
+    	</delete>
+    </target>
+</project>
