@@ -6,8 +6,8 @@ import edu.nps.moves.siso.EnumNotFoundException;
 /** Enumeration values for PduTypeDIS7
  * 
  * This is mostly a manual copy of PduType, only working for DIS7, not DIS6.
- * There are some differenees, and a few new PDUs. THere were some name changes
- * in the SISO-10, includnig a swap to a PDU name of "IFF" and PDUs for 
+ * There are some differences, and a few new PDUs. THere were some name changes
+ * in the SISO-10, including a swap to a PDU name of "IFF" and PDUs for 
  * 68-72, according to the XML. Not sure about the code portion.
  *
  * Copyright 2008-20017. This work is licensed under the BSD license, available at
@@ -92,8 +92,7 @@ public enum PduTypeDIS7
     INFORMATION_OPERATIONS_ACTION(70, "Information Operations Action"),
     INFORMATION_OPERATIONS_REPORT(71, "Information Operations Report"),
     ATTRIBUTE(72, "Attribute");
-    
-
+          
     /** The enumerated value */
     public final int value;
 
@@ -104,17 +103,17 @@ public enum PduTypeDIS7
  * enumerated values. If there is no enumeration corresponding to the value it will fail, and it will also fail if the
  * index it out of range of the array. But it is fast, and generates less garbage than the alternative of using 
  * getEnumerationForValue(). It should be used only in real-time environments, and be careful even then.<p>
- * Use as PduType.lookup[aVal] to get the enumeration that corresponds to a value.<p>
+ * Use as PdPduTypeDIS7.lookup[aVal] to get the enumeration that corresponds to a value.<p>
  * In non-realtime environments, the prefered method is getEnumerationForValue().
  */
-static public PduType lookup[] = new PduType[68];
+static public PduTypeDIS7 lookup[] = new PduTypeDIS7[68];
 
-static private HashMap<Integer, PduType>enumerations = new HashMap<Integer, PduType>();
+static private HashMap<Integer, PduTypeDIS7>enumerations = new HashMap<Integer, PduTypeDIS7>();
 
 /* initialize the array and hash table at class load time */
 static 
 {
-    for(PduType anEnum:PduType.values())
+    for(PduTypeDIS7 anEnum:PduTypeDIS7.values())
     {
         lookup[anEnum.value] = anEnum;
         enumerations.put(new Integer(anEnum.getValue()), anEnum);
@@ -135,7 +134,7 @@ static public String getDescriptionForValue(int aVal)
 {
   String desc;
 
-    PduType val = enumerations.get(new Integer(aVal));
+    PduTypeDIS7 val = enumerations.get(new Integer(aVal));
       if(val == null)
         desc = "Invalid enumeration: " + (new Integer(aVal)).toString();
       else
@@ -147,9 +146,9 @@ static public String getDescriptionForValue(int aVal)
 /** Returns the enumerated instance with this value. 
  * If there is no enumerated instance for this value, the exception is thrown.
 */
-static public PduType getEnumerationForValue(int aVal) throws EnumNotFoundException
+static public PduTypeDIS7 getEnumerationForValue(int aVal) throws EnumNotFoundException
 {
-    PduType val;
+    PduTypeDIS7 val;
       val = enumerations.get(new Integer(aVal));
       if(val == null)
          throw new EnumNotFoundException("no enumeration found for value " + aVal + " of enumeration PduType");
@@ -160,7 +159,7 @@ static public PduType getEnumerationForValue(int aVal) throws EnumNotFoundExcept
 */
 static public boolean enumerationForValueExists(int aVal)
 {
-    PduType val;
+    PduTypeDIS7 val;
       val = enumerations.get(new Integer(aVal));
       if(val == null)
          return false;
