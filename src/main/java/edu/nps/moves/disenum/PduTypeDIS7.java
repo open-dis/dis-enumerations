@@ -106,7 +106,7 @@ public enum PduTypeDIS7
  * Use as PdPduTypeDIS7.lookup[aVal] to get the enumeration that corresponds to a value.<p>
  * In non-realtime environments, the prefered method is getEnumerationForValue().
  */
-static public PduTypeDIS7 lookup[] = new PduTypeDIS7[68];
+static public PduTypeDIS7 lookup[] = new PduTypeDIS7[73];
 
 static private HashMap<Integer, PduTypeDIS7>enumerations = new HashMap<Integer, PduTypeDIS7>();
 
