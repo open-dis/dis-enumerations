@@ -28,7 +28,12 @@ public enum RadioSystem
     SINCGARS(5, "SINCGARS"),
     CCTT_SINCGARS(6, "CCTT SINCGARS"),
     EPLRS_ENHANCED_POSITION_LOCATION_REPORTING_SYSTEM(7, "EPLRS (Enhanced Position Location Reporting System)"),
-    JTIDS_MIDS(8, "JTIDS/MIDS");
+    JTIDS_MIDS(8, "JTIDS/MIDS"),
+    LINK_11(9, "Link 11"),
+    LINK_11B(10, "Link 11B"),    
+    L_BAND_SATCOM(11, "L-Band SATCOM"),    
+    ENHANCED_SINCGARS_7_3(12, "Enhanced SINCGARS 7.3"),    
+    NAVIGATION_AID(13, "Navigation Aid");    
 
     /** The enumerated value */
     public final int value;
@@ -43,7 +48,7 @@ public enum RadioSystem
  * Use as RadioSystem.lookup[aVal] to get the enumeration that corresponds to a value.<p>
  * In non-realtime environments, the prefered method is getEnumerationForValue().
  */
-static public RadioSystem lookup[] = new RadioSystem[9];
+static public RadioSystem lookup[] = new RadioSystem[11];
 
 static private HashMap<Integer, RadioSystem>enumerations = new HashMap<Integer, RadioSystem>();
 
