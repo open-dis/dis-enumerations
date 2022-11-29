@@ -48,7 +48,7 @@ public enum RadioSystem
  * Use as RadioSystem.lookup[aVal] to get the enumeration that corresponds to a value.<p>
  * In non-realtime environments, the prefered method is getEnumerationForValue().
  */
-static public RadioSystem lookup[] = new RadioSystem[11];
+static public RadioSystem lookup[] = new RadioSystem[14];
 
 static private HashMap<Integer, RadioSystem>enumerations = new HashMap<Integer, RadioSystem>();
 

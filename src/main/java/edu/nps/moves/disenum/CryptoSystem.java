@@ -48,7 +48,7 @@ public enum CryptoSystem
  * Use as CryptoSystem.lookup[aVal] to get the enumeration that corresponds to a value.<p>
  * In non-realtime environments, the prefered method is getEnumerationForValue().
  */
-static public CryptoSystem lookup[] = new CryptoSystem[12];
+static public CryptoSystem lookup[] = new CryptoSystem[14];
 
 static private HashMap<Integer, CryptoSystem>enumerations = new HashMap<Integer, CryptoSystem>();
 
