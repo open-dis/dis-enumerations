@@ -20,12 +20,20 @@ import edu.nps.moves.siso.EnumNotFoundException;
 public enum CryptoSystem 
 {
 
-    OTHER(0, "Other"),
+    NO_ENCRYPTION_DEVICE(0, "No Encryption Device"),
     KY_28(1, "KY-28"),
     VINSON_KY_57_KY_58_SINCGARS_ICOM(2, "VINSON (KY-57, KY-58, SINCGARS ICOM)"),
     NARROW_SPECTRUM_SECURE_VOICE_NSVE(3, "Narrow Spectrum Secure Voice (NSVE)"),
     WIDE_SPECTRUM_SECURE_VOICE_WSVE(4, "Wide Spectrum Secure Voice (WSVE)"),
-    MISSING_DESCRIPTION(5, "Missing Description");
+    SINCGARS_ICOM(5, "SINCGARS ICOM"),
+    KY_75(6, "KY-75"),
+    KY_100(7, "KY-100"),
+    KY_57(8, "KY-57"),
+    KYV_5(9, "KYV-5"),
+    LINK_11_KG_40A_P_NTDS(10, "Link 11 KG-40A-P (NTDS)"),  
+    LINK_11B_KG_40A_S(11, "Link 11B KG-40A-S"),   
+    LINK_11_KG_40AR(12, "Link 11 KG-40AR"),   
+    KGV_135A(13, "KGV-135A");   
 
     /** The enumerated value */
     public final int value;
@@ -40,7 +48,7 @@ public enum CryptoSystem
  * Use as CryptoSystem.lookup[aVal] to get the enumeration that corresponds to a value.<p>
  * In non-realtime environments, the prefered method is getEnumerationForValue().
  */
-static public CryptoSystem lookup[] = new CryptoSystem[6];
+static public CryptoSystem lookup[] = new CryptoSystem[14];
 
 static private HashMap<Integer, CryptoSystem>enumerations = new HashMap<Integer, CryptoSystem>();
 
