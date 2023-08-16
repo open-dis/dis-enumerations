@@ -5,15 +5,8 @@
     <packaging>jar</packaging>
     <name>Enumerations</name>
     <version>1.3-SNAPSHOT</version>
-    <description>Sonatype helps open source projects to set up Maven repositories on https://oss.sonatype.org/
-
-
-An older description of enumeration data. The XML that describes the enumerations is badly out of 
-date; it changed substantially after I wrote most of the project. What should really
-happen is that this application should be re-written to accomodate the actual
-XML used for enumerations. Iv'e added  manual implementation of PduTypeDIS7.java to handle
-    DIS version 7, sort of.</description>
-    <url>http://open-dis.sourceforge.net</url>
+    <description>DIS enumeration Java constants auto-generated from the SISO spec</description>
+    <url>http://www.open-dis.org</url>
     <licenses>
         <license>
             <name>BSD License</name>
