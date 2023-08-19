@@ -30,7 +30,7 @@ public class EBVReader
      */
     public static final String EBV_XML_DOCUMENT = "data/siso-std-010.xml";
     
-    public static final String CPP_TEMPLATES_DIR = "templates";
+    public static final String CPP_TEMPLATES_DIR = "src/main/resources/disenums/cpp/templates";
     
     public static final String GEN_JAVA_SOURCE_OUTPUT_DIR = "src/main/java/edu/nps/moves/disenum/";
     public static final String GEN_CPP_SOURCE_OUTPUT_DIR = "src/main/cpp/disenum/";
