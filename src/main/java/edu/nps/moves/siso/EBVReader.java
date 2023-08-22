@@ -30,6 +30,11 @@ public class EBVReader
      */
     public static final String EBV_XML_DOCUMENT = "data/siso-std-010.xml";
     
+    public static final String CPP_TEMPLATES_DIR = "templates";
+    
+    public static final String GEN_JAVA_SOURCE_OUTPUT_DIR = "src/main/java/edu/nps/moves/disenum/";
+    public static final String GEN_CPP_SOURCE_OUTPUT_DIR = "src/main/cpp/disenum/";
+    
     public static void main(String args[])
     {
         try
@@ -38,7 +43,11 @@ public class EBVReader
             // Parse the EBV XML document
              JAXBContext context = JAXBContext.newInstance("edu.nps.moves.siso.jaxb");
              Unmarshaller unmarshaller = context.createUnmarshaller();
-             Ebv data = (Ebv)unmarshaller.unmarshal(new FileInputStream("data/siso-std-010.xml"));
+             Ebv data = (Ebv)unmarshaller.unmarshal(new FileInputStream(EBV_XML_DOCUMENT));
+             
+             // Create folders to write the generated files in.
+             new File(GEN_JAVA_SOURCE_OUTPUT_DIR).mkdirs();
+             new File(GEN_CPP_SOURCE_OUTPUT_DIR).mkdirs();
              
              // write the common header
              writeCppEnumerationCommon();
@@ -1114,10 +1123,10 @@ public class EBVReader
       try {
         String enumerationFile = "Enumeration.h";
         System.out.println("Writing common enumeration header" + enumerationFile);
-        copyFile("templates/"+ enumerationFile, "src/main/cpp/disenum/"+ enumerationFile);  
+        copyFile(CPP_TEMPLATES_DIR + enumerationFile, GEN_CPP_SOURCE_OUTPUT_DIR+ enumerationFile);
         enumerationFile = "enumcfg.h";
         System.out.println("Writing common enumeration header" + enumerationFile);
-        copyFile("templates/"+ enumerationFile, "src/main/cpp/disenum/"+ enumerationFile);
+        copyFile(CPP_TEMPLATES_DIR + enumerationFile, GEN_CPP_SOURCE_OUTPUT_DIR+ enumerationFile);
         
       }
       catch(Exception e) {
@@ -1197,7 +1206,7 @@ public class EBVReader
         }        
         maxValue++;
         // ----------- Write .h file -----------------    
-        File outputFile = new File("src/main/cpp/disenum/" + enumerationName + ".h");
+        File outputFile = new File(GEN_CPP_SOURCE_OUTPUT_DIR + enumerationName + ".h");
         outputFile.createNewFile();
         System.out.println("Writing enumeration " + outputFile.getPath());        
         PrintWriter pw = new PrintWriter(outputFile);
@@ -1206,10 +1215,10 @@ public class EBVReader
         Iterator<String> enumsIter = enumNamesUsed.iterator();
         
         if (isCountry){
-          template = readFileAsString("templates/countryEnumTemplate.h");
+          template = readFileAsString(CPP_TEMPLATES_DIR + "/countryEnumTemplate.h");
         }
         else {
-          template = readFileAsString("templates/enumTemplate.h");        
+          template = readFileAsString(CPP_TEMPLATES_DIR + "/enumTemplate.h");
         }
 
         for(int idx = 0; idx < enumNamesUsed.size(); idx++)
@@ -1227,7 +1236,7 @@ public class EBVReader
         pw.close();
         
         // ----------- Write .cpp file -----------------    
-        outputFile = new File("src/main/cpp/disenum/" + enumerationName + ".cpp");
+        outputFile = new File(GEN_CPP_SOURCE_OUTPUT_DIR + enumerationName + ".cpp");
         outputFile.createNewFile();
         System.out.println("Writing enumeration " + outputFile.getPath());
         pw = new PrintWriter(outputFile);
@@ -1236,7 +1245,7 @@ public class EBVReader
         enumsIter = enumNamesUsed.iterator();
         
         if (isCountry){
-          template = readFileAsString("templates/countryEnumTemplate.cpp");
+          template = readFileAsString(CPP_TEMPLATES_DIR + "/countryEnumTemplate.cpp");
           for(int idx = 0; idx < enumNamesUsed.size(); idx++)
           {
             String enumName = enumsIter.next();
@@ -1247,7 +1256,7 @@ public class EBVReader
           }
         }
         else {
-          template = readFileAsString("templates/enumTemplate.cpp");   
+          template = readFileAsString(CPP_TEMPLATES_DIR + "/enumTemplate.cpp");
           for(int idx = 0; idx < enumNamesUsed.size(); idx++)
           {
             String enumName = enumsIter.next();            
@@ -1272,10 +1281,9 @@ public class EBVReader
         
     }
     
-    
     private void writeJavaStandardEnumeration(String enumerationName, EnumT anEnumeration)
     {
-        String enumerationFile = "src/main/java/edu/nps/moves/disenum/" + enumerationName + ".java";
+        String enumerationFile = GEN_JAVA_SOURCE_OUTPUT_DIR + enumerationName + ".java";
         System.out.println("Writing standard enumeration " + enumerationFile );
         try
         {
@@ -1502,7 +1510,7 @@ public class EBVReader
     {
         try
         {
-              String enumerationFile = "src/main/java/edu/nps/moves/disenum/" + enumerationName + ".java";
+              String enumerationFile = GEN_JAVA_SOURCE_OUTPUT_DIR + enumerationName + ".java";
               File outputFile = new File(enumerationFile);
               outputFile.createNewFile();
               PrintWriter pw = new PrintWriter(outputFile);
@@ -1889,7 +1897,7 @@ public class EBVReader
             StringBuilder allEnums = new StringBuilder();
             Iterator<String> enumsIter = enumNamesUsed.iterator();
             
-            template = readFileAsString("templates/subfieldEnumTemplate.h"); 
+            template = readFileAsString(CPP_TEMPLATES_DIR + "/subfieldEnumTemplate.h");
     
             for(int idx = 0; idx < enumNamesUsed.size(); idx++)
             {
@@ -1908,7 +1916,7 @@ public class EBVReader
             allEnums = new StringBuilder();
             enumsIter = enumNamesUsed.iterator();          
             
-            template = readFileAsString("templates/subfieldEnumTemplate.cpp");   
+            template = readFileAsString(CPP_TEMPLATES_DIR + "/subfieldEnumTemplate.cpp");
             for(int idx = 0; idx < enumNamesUsed.size(); idx++)
             {
               String enumName = enumsIter.next();            
@@ -1927,12 +1935,12 @@ public class EBVReader
         
         
         // ----------- Write <bitmask>.h -----------------
-        File outputFile = new File("src/main/cpp/disenum/" + bitmaskName + ".h");
+        File outputFile = new File(GEN_CPP_SOURCE_OUTPUT_DIR + bitmaskName + ".h");
         outputFile.createNewFile();
         System.out.println("  Writing bitmask " + outputFile.getPath());        
         PrintWriter pw = new PrintWriter(outputFile);
         String template = new String();
-        template = readFileAsString("templates/bitmaskTemplate.h");
+        template = readFileAsString(CPP_TEMPLATES_DIR + "/bitmaskTemplate.h");
         
         template = template.replaceAll("@BITMASKUPPERCASE", bitmaskName.toUpperCase());
         template = template.replaceAll("@BITMASK", bitmaskName);  
@@ -1947,12 +1955,12 @@ public class EBVReader
         
         
         // ----------- Write <bitmask>.cpp -----------------
-        outputFile = new File("src/main/cpp/disenum/" + bitmaskName + ".cpp");
+        outputFile = new File(GEN_CPP_SOURCE_OUTPUT_DIR + bitmaskName + ".cpp");
         outputFile.createNewFile();
         System.out.println("  Writing bitmask " + outputFile.getPath());
         pw = new PrintWriter(outputFile);
         template = new String();
-        template = readFileAsString("templates/bitmaskTemplate.cpp");
+        template = readFileAsString(CPP_TEMPLATES_DIR + "/bitmaskTemplate.cpp");
         
         template = template.replaceAll("@BITMASK", bitmaskName);
         template = template.replaceAll("@TYPE", valueType);
